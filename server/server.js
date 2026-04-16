@@ -1,13 +1,19 @@
 import express from "express";
-import cors from "cors";
 import dotenv from "dotenv";
-import { MongoClient } from "mongodb";
+import cors from "cors";
+import connectDB from "./config/db.js"; // இதைப் புதிதாகச் சேர்க்கவும்
 
 dotenv.config();
+
+// Connect to Database
+connectDB(); // இதைச் சேர்க்கவும்
+
 const app = express();
+app.use(cors());
+app.use(express.json());
 
 app.get("/", (req, res) => {
-  res.send("Techno Ecom Server is running ! ");
+  res.send("Techno Ecom Server is running ! 🚀");
 });
 
 const PORT = process.env.PORT || 5000;
