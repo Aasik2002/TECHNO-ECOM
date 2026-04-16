@@ -1,9 +1,13 @@
 import express from "express";
-import { registerUser } from "../controllers/userController.js";
+// Import both functions from the controller
+import { registerUser, authUser } from "../controllers/userController.js";
 
 const router = express.Router();
 
-// பயனர் பதிவு செய்யும் முகவரி
+// Define Route for Registration
 router.post("/register", registerUser);
+
+// Define Route for Login
+router.post("/login", authUser);
 
 export default router;
