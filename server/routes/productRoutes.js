@@ -1,10 +1,24 @@
 import express from "express";
-import { createProduct, getProducts } from "../controllers/productController.js";
+import { 
+  createProduct, 
+  getProducts, 
+  getProductById, 
+  updateProduct, 
+  deleteProduct 
+} from "../controllers/productController.js";
 import { protect, admin } from "../middleware/authMiddleware.js";
 
 const router = express.Router();
 
-// பொருட்களைப் பார்க்க எல்லாரையும் அனுமதிப்போம், ஆனால் உருவாக்க அட்மின் மட்டும் தான் முடியும்
-router.route("/").get(getProducts).post(protect, admin, createProduct);
+// 1. எல்லா பொருட்களையும் பார்க்க (GET) மற்றும் புதிய பொருளை உருவாக்க (POST - Admin Only)
+router.route("/")
+  .get(getProducts)
+  .post(protect, admin, createProduct);
+
+// 2. ஒரு குறிப்பிட்ட பொருளைப் பார்க்க (GET), திருத்த (PUT - Admin Only) மற்றும் நீக்க (DELETE - Admin Only)
+router.route("/:id")
+  .get(getProductById)
+  .put(protect, admin, updateProduct)
+  .delete(protect, admin, deleteProduct);
 
 export default router;
