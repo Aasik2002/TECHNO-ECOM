@@ -4,6 +4,7 @@ import cors from "cors";
 import connectDB from "./config/db.js";
 import userRoutes from "./routes/userRoutes.js"; 
 import productRoutes from "./routes/productRoutes.js";
+import orderRoutes from "./routes/orderRoutes.js";
 
 dotenv.config();
 
@@ -17,6 +18,7 @@ app.use(express.json());
 // Routes
 app.use("/api/users", userRoutes);
 app.use("/api/products", productRoutes);
+app.use("/api/orders", orderRoutes);
 
 app.get("/", (req, res) => {
   res.send("Techno Ecom Server is running ! 🚀");
