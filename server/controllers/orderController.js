@@ -83,3 +83,16 @@ export const updateOrderToPaid = async (req, res) => {
     res.status(500).json({ message: error.message });
   }
 };
+
+// @desc    Get logged in user orders
+// @route   GET /api/orders/myorders
+// @access  Private
+export const getMyOrders = async (req, res) => {
+  try {
+    // req.user._id என்பது லாகின் செய்துள்ள பயனரின் ஐடி
+    const orders = await Order.find({ user: req.user._id });
+    res.json(orders);
+  } catch (error) {
+    res.status(500).json({ message: error.message });
+  }
+};
