@@ -2,7 +2,7 @@ import Order from "../models/Order.js";
 
 // @desc    Create new order
 // @route   POST /api/orders
-// @access  Private (Login செய்தவர்கள் மட்டும்)
+// @access  Private 
 export const addOrderItems = async (req, res) => {
   const {
     orderItems,
@@ -21,10 +21,10 @@ export const addOrderItems = async (req, res) => {
     const order = new Order({
       orderItems: orderItems.map((x) => ({
         ...x,
-        product: x.product, // Product ID-ஐ இணைக்கிறோம்
+        product: x.product, 
         _id: undefined,
       })),
-      user: req.user._id, // லாகின் செய்த யூசரின் ஐடி
+      user: req.user._id, 
       shippingAddress,
       paymentMethod,
       itemsPrice,
@@ -41,7 +41,6 @@ export const addOrderItems = async (req, res) => {
 // @route   GET /api/orders/:id
 // @access  Private
 export const getOrderById = async (req, res) => {
-  // .populate('user', 'name email') - இது யூசரோட பேரை வேற டேபிள்ள இருந்து எடுத்துட்டு வரும்
   try {
     const order = await Order.findById(req.params.id).populate(
       "user",
@@ -50,6 +49,33 @@ export const getOrderById = async (req, res) => {
 
     if (order) {
       res.json(order);
+    } else {
+      res.status(404).json({ message: "Order not found" });
+    }
+  } catch (error) {
+    res.status(500).json({ message: error.message });
+  }
+};
+
+// @desc    Update order to paid
+// @route   PUT /api/orders/:id/pay
+// @access  Private
+export const updateOrderToPaid = async (req, res) => {
+  try {
+    const order = await Order.findById(req.params.id);
+
+    if (order) {
+      order.isPaid = true;
+      order.paidAt = Date.now();
+      order.paymentResult = {
+        id: req.body.id,
+        status: req.body.status,
+        update_time: req.body.update_time,
+        email_address: req.body.email_address,
+      };
+
+      const updatedOrder = await order.save();
+      res.json(updatedOrder);
     } else {
       res.status(404).json({ message: "Order not found" });
     }
